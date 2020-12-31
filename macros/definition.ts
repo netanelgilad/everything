@@ -16,7 +16,7 @@ import { Map } from "@depno/immutable";
 import { toAST } from "./toAST.ts";
 
 export const definition = createMacro<(node: any) => Definition>(
-  (nodeBundle) => {
+  (nodeClosure) => {
     return Closure({
       expression: callExpression(identifier("Definition"), [
         objectExpression([
@@ -26,7 +26,7 @@ export const definition = createMacro<(node: any) => Definition>(
               variableDeclaration("const", [
                 variableDeclarator(
                   identifier("anonymous"),
-                  nodeBundle.expression
+                  nodeClosure.expression
                 ),
               ])
             )
@@ -35,7 +35,7 @@ export const definition = createMacro<(node: any) => Definition>(
             identifier("references"),
             callExpression(identifier("Map"), [
               arrayExpression(
-                nodeBundle.references
+                nodeClosure.references
                   .toSeq()
                   .toArray()
                   .map(([localName, canonicalName]) => {
