@@ -2,7 +2,10 @@ import {
   CanonicalName,
   Declaration,
   getOutOfScopeReferences,
+  Identifier,
+  ImportSpecifier,
   isImportDeclaration,
+  isImportSpecifier,
   Statement,
 } from "@depno/core";
 import { Map } from "@depno/immutable";
@@ -24,11 +27,20 @@ export function getReferencesFromDeclaration(
             throw new Error(`definition not found ${reference}`);
           }
         }
+
+        const name = !isImportDeclaration(bindingStatement)
+          ? reference
+          : ((bindingStatement.specifiers.find(
+              (specifier) =>
+                isImportSpecifier(specifier) &&
+                specifier.local.name === reference
+            ) as ImportSpecifier)?.imported as Identifier).name ?? reference;
+
         return [
           [
             reference,
             CanonicalName({
-              name: reference,
+              name,
               uri: isImportDeclaration(bindingStatement)
                 ? resolveURIFromDependency(bindingStatement.source.value, scope)
                 : scope,

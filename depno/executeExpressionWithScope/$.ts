@@ -1,7 +1,6 @@
 import {
   CanonicalName,
   Closure,
-  Definition,
   Expression,
   getOutOfScopeReferences,
 } from "@depno/core";
