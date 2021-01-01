@@ -11,7 +11,6 @@ import {
 import { forkProgram } from "@depno/host";
 import { Map } from "@depno/immutable";
 import { ChildProcess } from "child_process";
-import { symlinkSync, unlinkSync } from "fs";
 import { resolve } from "path";
 import { inMemoryHost } from "../in_memory_host/$.ts";
 import { closure } from "../macros/closure.ts";
@@ -46,8 +45,6 @@ export async function build() {
       output: "target/opah",
     }
   );
-  unlinkSync("opah");
-  symlinkSync("./target/opah", "opah");
 }
 
 export function test() {
