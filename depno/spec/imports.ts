@@ -4,13 +4,14 @@ import { join } from "path";
 import { someDirectory } from "../../abstracts/someDirectory.ts";
 import { assertThat } from "../../assertions/assertThat.ts";
 import { willStream } from "../../assertions/willStream.ts";
+import { closure } from "../../macros/closure.ts";
 import { scenario } from "../../validator/scenario.ts";
 import { executeExpressionWithScope } from "../executeExpressionWithScope/$.ts";
 
 export const importsScenarios = [
   scenario({
     description: "should run with import aliasing",
-    async verify() {
+    verify: closure(async () => {
       const directory = someDirectory();
       writeFileSync(
         join(directory, "index.ts"),
@@ -30,6 +31,6 @@ export const importsScenarios = [
       );
 
       await assertThat(process.stdout!, willStream("Hello"));
-    },
+    }),
   }),
 ];

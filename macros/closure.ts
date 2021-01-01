@@ -12,8 +12,8 @@ import {
 import { Map } from "@depno/immutable";
 import { toAST } from "./toAST.ts";
 
-export const closure = createMacro<(node: any) => Closure>((nodeClosure) => {
-  return Closure({
+export const closure = createMacro(<T>(nodeClosure: Closure<T>) => {
+  return Closure<Closure<T>>({
     expression: callExpression(identifier("Closure"), [
       objectExpression([
         objectProperty(identifier("expression"), toAST(nodeClosure.expression)),

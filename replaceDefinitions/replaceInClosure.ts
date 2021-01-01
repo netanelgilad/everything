@@ -3,8 +3,8 @@ import { Map, Set } from "@depno/immutable";
 import { randomBytes } from "crypto";
 import { getDefinitionForCanonicalName } from "../depno/getDefinitionForCanonicalName.ts";
 
-export async function replaceInClosure(
-  closure: Closure,
+export async function replaceInClosure<T>(
+  closure: Closure<T>,
   replacements: Map<CanonicalName, Definition>
 ) {
   const graph = await dependantsGraoh(closure);
@@ -55,7 +55,7 @@ export async function replaceInClosure(
       closure.references.map((x) => artificialCanonicalNames.get(x) ?? x)
     );
   }
-  return [closure, undefined, artificialDefinitions] as const;
+  return [closure, artificialDefinitions] as const;
 }
 
 function mergeSets<T>(a: Set<T>, b: Set<T>) {
@@ -76,6 +76,7 @@ export async function dependantsGraoh(
         referenceDefinition,
         seenNodes.add(reference)
       );
+
       const references = referenceDefinition.references.valueSeq().toSet();
       dependants = dependants
         .mergeWith(mergeSets, Map(references.map((x) => [x, Set([reference])])))

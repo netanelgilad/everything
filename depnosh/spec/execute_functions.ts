@@ -1,16 +1,18 @@
+import { logToConsole } from "@depno/host";
 import { writeFileSync } from "fs";
 import { join } from "path";
 import { PassThrough } from "stream";
 import { someDirectory } from "../../abstracts/someDirectory.ts";
 import { assertThat } from "../../assertions/assertThat.ts";
 import { willStream } from "../../assertions/willStream.ts";
+import { closure } from "../../macros/closure.ts";
 import { scenario } from "../../validator/scenario.ts";
 import { open } from "../open.ts";
 
 export const scenarios = [
   scenario({
     description: `should allow running a function from a depno file`,
-    verify: async () => {
+    verify: closure(async () => {
       const directory = someDirectory();
       const expectedOutput = someString();
       writeFileSync(
@@ -26,7 +28,7 @@ export const scenarios = [
       await assertThat(stdout, willStream("$ "));
       stdin.write("sayHello()\n");
       await assertThat(stdout, willStream(expectedOutput));
-    },
+    }),
   }),
 ];
 

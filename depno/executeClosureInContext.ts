@@ -1,8 +1,15 @@
-import { Closure } from "@depno/core";
+import { CanonicalName, Closure, Definition } from "@depno/core";
 import { executeProgram } from "@depno/host";
+import { Map } from "@depno/immutable";
 import { getExecutionProgramForDefinition } from "./executeExpressionWithScope/getExecutionProgramForDefinition/$.ts";
 
-export async function executeClosureInContext(closure: Closure) {
-  const program = await getExecutionProgramForDefinition(closure);
+export async function executeClosureInContext<TReturn>(
+  closure: Closure<TReturn>,
+  artificialDefinitions: Map<CanonicalName, Definition> = Map()
+): Promise<TReturn> {
+  const program = await getExecutionProgramForDefinition(
+    closure,
+    artificialDefinitions
+  );
   return executeProgram(program);
 }

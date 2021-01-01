@@ -26,7 +26,10 @@ import { canonicalIdentifier } from "./canonicalIdentifier.ts";
 import { isMacroDefinition } from "./isMacroDefinition.ts";
 import { processMacros } from "./processMacros.ts";
 
-export async function getExecutionProgramForDefinition(closure: Closure) {
+export async function getExecutionProgramForDefinition(
+  closure: Closure,
+  executeArtificialDefinitions: Map<CanonicalName, Definition> = Map()
+) {
   let definitions = Map<CanonicalName, Definition>();
   let references = closure.references.valueSeq().toSet();
   while (references.size > 0) {
@@ -36,12 +39,14 @@ export async function getExecutionProgramForDefinition(closure: Closure) {
     }
     if (!definitions.has(reference)) {
       const definitionOfReference = await getDefinitionForCanonicalName(
-        reference
+        reference,
+        executeArtificialDefinitions
       );
       if (!isMacroDefinition(definitionOfReference)) {
         const [updatedDefinition, artificialDefinitions] = await processMacros(
           reference,
-          definitionOfReference
+          definitionOfReference,
+          executeArtificialDefinitions
         );
         definitions = definitions
           .merge(artificialDefinitions)

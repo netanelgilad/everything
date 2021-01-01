@@ -14,13 +14,11 @@ import {
   variableDeclaration,
   variableDeclarator,
 } from "@depno/core";
-import { resolveURIFromDependency } from "./resolveURIFromDependency.ts";
-import { getExpressionFromReferencedDefinitionNode } from "./getExpressionFromReferenceDefinitionNode.ts";
+import { getBindingsStatementsInScope } from "../executeExpressionWithScope/getBindingsStatementsInScope.ts";
 import { getReferencesFromDeclaration } from "./getReferencesFromExpression.ts";
 import { isReferencedDefinitionNode } from "./isReferencedDefinitionNode.ts";
-import { getBindingsStatementsInScope } from "../executeExpressionWithScope/getBindingsStatementsInScope.ts";
 import { ReferencedDefinitionNode } from "./ReferencedDefinitionNode.ts";
-import { Map } from "@depno/immutable";
+import { resolveURIFromDependency } from "./resolveURIFromDependency.ts";
 
 export async function getDefinitionFromExternalURI(
   canonicalName: CanonicalName

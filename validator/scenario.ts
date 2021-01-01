@@ -1,5 +1,7 @@
+import { Closure } from "@depno/core";
+
 export type Scenario = {
   description: string;
-  verify: () => Promise<unknown>;
+  verify: Closure<() => Promise<unknown>>;
 };
 export const scenario = (x: Scenario) => x;

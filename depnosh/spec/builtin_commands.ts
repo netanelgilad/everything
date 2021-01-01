@@ -1,4 +1,3 @@
-import { logToConsole } from "@depno/host";
 import { strict as assert } from "assert";
 import { EventEmitter } from "events";
 import { PassThrough } from "stream";
@@ -7,13 +6,14 @@ import { assertion } from "../../assertions/Assertion.ts";
 import { assertThat } from "../../assertions/assertThat.ts";
 import { not } from "../../assertions/not.ts";
 import { willStream } from "../../assertions/willStream.ts";
+import { closure } from "../../macros/closure.ts";
 import { scenario } from "../../validator/scenario.ts";
 import { open } from "../open.ts";
 
 export const builtinCommandsScenarios = [
   scenario({
     description: "should close the shell when the command is exit",
-    async verify() {
+    verify: closure(async () => {
       const directory = someDirectory();
       const stdin = new PassThrough();
       const stdout = new PassThrough();
@@ -29,7 +29,7 @@ export const builtinCommandsScenarios = [
         stdin,
         hasEventsListernsCount(stdinBeforeOpenEventsListernsCount)
       );
-    },
+    }),
   }),
 ];
 
