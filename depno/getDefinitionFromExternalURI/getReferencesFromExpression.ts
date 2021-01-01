@@ -59,6 +59,7 @@ const globals = [
   "escape",
   "Int32Array",
   "String",
+  "process",
 ];
 
 type LocalName = string;
