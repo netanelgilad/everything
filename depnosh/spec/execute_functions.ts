@@ -1,6 +1,7 @@
 import { writeFileSync } from "fs";
 import { join } from "path";
 import { PassThrough } from "stream";
+import { someDirectory } from "../../abstracts/someDirectory.ts";
 import { assertThat } from "../../assertions/assertThat.ts";
 import { willStream } from "../../assertions/willStream.ts";
 import { scenario } from "../../validator/scenario.ts";
@@ -28,10 +29,6 @@ export const scenarios = [
     },
   }),
 ];
-
-function someDirectory() {
-  return "/tmp/asdsad";
-}
 
 function someString() {
   return "asdasdas";

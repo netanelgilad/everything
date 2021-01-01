@@ -27,5 +27,7 @@ export async function collectWhileMatches(
 
     stream.on("data", listener);
     stream.on("end", () => resolve([false, result]));
+    stream.on("close", () => resolve([false, result]));
+    stream.on("error", () => resolve([false, result]));
   });
 }
