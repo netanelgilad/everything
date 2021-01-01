@@ -1,4 +1,5 @@
 import { ExpressionStatement, getASTFromCode } from "@depno/core";
+import { logToConsole } from "@depno/host";
 import { Map } from "@depno/immutable";
 import { join } from "path";
 import { createInterface } from "readline";
@@ -11,10 +12,21 @@ export async function open(stdin: Readable, stdout: Writable, cwd: string) {
     output: stdout,
   });
 
+  rl.on("SIGINT", () => {
+    logToConsole();
+    // @ts-expect-error
+    rl.line = "";
+    rl.prompt();
+  });
+
   rl.setPrompt("$ ");
   rl.prompt();
   rl.on("line", async (line) => {
-    await handleCommand(line, cwd, stdout);
+    if (line !== "") {
+      try {
+        await handleCommand(line, cwd, stdout);
+      } catch {}
+    }
     rl.prompt();
   });
 }
