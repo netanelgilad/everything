@@ -11,6 +11,7 @@ import {
 import { forkProgram } from "@depno/host";
 import { Map } from "@depno/immutable";
 import { ChildProcess } from "child_process";
+import { symlinkSync, unlinkSync } from "fs";
 import { resolve } from "path";
 import { inMemoryHost } from "../in_memory_host/$.ts";
 import { closure } from "../macros/closure.ts";
@@ -19,8 +20,8 @@ import { runScenarios } from "../validator/runScenarios.ts";
 import { getExecutionProgramForDefinition } from "./executeExpressionWithScope/getExecutionProgramForDefinition/$.ts";
 import { depnoSpec } from "./spec/index.ts";
 
-export function build() {
-  buildExecutable(
+export async function build() {
+  await buildExecutable(
     closure(async (argv: string[]) => {
       const fileToRun = argv[2];
       const exportedFunctionName = argv[3];
@@ -42,9 +43,11 @@ export function build() {
     }),
     {
       target: "host",
-      output: "target/depno",
+      output: "target/opah",
     }
   );
+  unlinkSync("opah");
+  symlinkSync("./target/opah", "opah");
 }
 
 export function test() {

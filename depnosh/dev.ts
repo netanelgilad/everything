@@ -12,7 +12,7 @@ export function build() {
     closure(() => open(process.stdin, process.stdout, process.cwd())),
     {
       target: "host",
-      output: "./target/depnosh",
+      output: "./target/opahsh",
     }
   );
 }
