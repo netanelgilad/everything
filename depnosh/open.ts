@@ -22,9 +22,14 @@ export async function open(stdin: Readable, stdout: Writable, cwd: string) {
   rl.setPrompt("$ ");
   rl.prompt();
   rl.on("line", async (line) => {
-    if (line !== "") {
+    const input = line.trim();
+
+    if (input === "exit") {
+      rl.close();
+      return;
+    } else if (input !== "") {
       try {
-        await handleCommand(line, cwd, stdout);
+        await handleCommand(input, cwd, stdout);
       } catch {}
     }
     rl.prompt();
