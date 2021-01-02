@@ -1,23 +1,30 @@
 import {
   CanonicalName,
-  Declaration,
+  classExpression,
+  functionExpression,
   getOutOfScopeReferences,
   Identifier,
   ImportSpecifier,
+  isClassDeclaration,
+  isFunctionDeclaration,
   isImportDeclaration,
   isImportSpecifier,
+  isVariableDeclarator,
+  Node,
   Statement,
 } from "@depno/core";
 import { Map } from "@depno/immutable";
+import { isReferencedDefinitionNode } from "./isReferencedDefinitionNode.ts";
+import { ReferencedDefinitionNode } from "./ReferencedDefinitionNode.ts";
 import { resolveURIFromDependency } from "./resolveURIFromDependency.ts";
 
-export function getReferencesFromDeclaration(
-  declaration: Declaration,
+export function getReferencesFromReferencedDefinitionNode(
+  declaration: ReferencedDefinitionNode,
   scope: string,
   bindingsStatementsInScope: Map<string, Statement>
 ) {
   return Map(
-    getOutOfScopeReferences(declaration)
+    getOutOfScopeReferences(withoutId(declaration))
       .flatMap((reference) => {
         const bindingStatement = bindingsStatementsInScope.get(reference);
         if (!bindingStatement) {
@@ -72,6 +79,33 @@ const globals = [
   "Int32Array",
   "String",
   "process",
+  "Symbol",
 ];
 
 type LocalName = string;
+
+function withoutId(node: ReferencedDefinitionNode): Node {
+  if (isFunctionDeclaration(node)) {
+    return functionExpression(
+      null,
+      node.params,
+      node.body,
+      node.generator,
+      node.async
+    );
+  } else if (isClassDeclaration(node)) {
+    return classExpression(null, node.superClass, node.body, node.decorators);
+  } else if (isVariableDeclarator(node)) {
+    if (!node.init) {
+      throw new Error("node without init");
+    }
+    return node.init;
+  } else {
+    if (!isReferencedDefinitionNode(node.declaration)) {
+      throw new Error(
+        `export default of non referenced node: ${node.declaration}`
+      );
+    }
+    return withoutId(node.declaration);
+  }
+}

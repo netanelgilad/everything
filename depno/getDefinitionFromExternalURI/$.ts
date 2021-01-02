@@ -15,7 +15,7 @@ import {
   variableDeclarator,
 } from "@depno/core";
 import { getBindingsStatementsInScope } from "../executeExpressionWithScope/getBindingsStatementsInScope.ts";
-import { getReferencesFromDeclaration } from "./getReferencesFromExpression.ts";
+import { getReferencesFromReferencedDefinitionNode } from "./getReferencesFromExpression.ts";
 import { isReferencedDefinitionNode } from "./isReferencedDefinitionNode.ts";
 import { ReferencedDefinitionNode } from "./ReferencedDefinitionNode.ts";
 import { resolveURIFromDependency } from "./resolveURIFromDependency.ts";
@@ -58,8 +58,8 @@ export async function getDefinitionFromExternalURI(
     bindingStatement
   );
 
-  const references = getReferencesFromDeclaration(
-    declaration,
+  const references = getReferencesFromReferencedDefinitionNode(
+    bindingStatement,
     canonicalName.uri,
     bindingsStatements
   );
@@ -75,7 +75,7 @@ function getDeclarationFromReferencedDefinitionNode(
 ): Declaration {
   if (isVariableDeclarator(node)) {
     if (!node.init) {
-      throw new Error("node with init");
+      throw new Error("node without init");
     }
     return variableDeclaration("const", [node]);
   } else if (isFunctionDeclaration(node)) {
