@@ -1,8 +1,8 @@
-import { logToConsole } from "@depno/host";
 import { writeFileSync } from "fs";
 import { join } from "path";
 import { PassThrough } from "stream";
 import { someDirectory } from "../../abstracts/someDirectory.ts";
+import { someString } from "../../abstracts/someString.ts";
 import { assertThat } from "../../assertions/assertThat.ts";
 import { willStream } from "../../assertions/willStream.ts";
 import { closure } from "../../macros/closure.ts";
@@ -31,7 +31,3 @@ export const scenarios = [
     }),
   }),
 ];
-
-function someString() {
-  return "asdasdas";
-}

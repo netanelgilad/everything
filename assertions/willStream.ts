@@ -5,6 +5,9 @@ import { collectWhileMatches } from "./collectWhileMatches.ts";
 
 export function willStream(expected: string) {
   return assertion(async (actual: Readable) => {
-    assert.ok((await collectWhileMatches(actual, expected))[0]);
+    assert.strictEqual(
+      (await collectWhileMatches(actual, expected))[1],
+      expected
+    );
   });
 }

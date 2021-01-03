@@ -14,20 +14,23 @@ export async function collectWhileMatches(
       if (
         toMatch.substr(currentPosition, chunkAsString.length) !== chunkAsString
       ) {
-        stream.removeListener("data", listener);
-        resolve([false, result]);
+        done(false, result);
       } else {
         currentPosition = currentPosition + chunkAsString.length;
         if (currentPosition >= toMatch.length) {
-          stream.removeListener("data", listener);
-          resolve([true]);
+          done(true, result);
         }
       }
     };
 
+    function done(didMatch: boolean, result: string) {
+      stream.removeListener("data", listener);
+      resolve([didMatch, result]);
+    }
+
     stream.on("data", listener);
-    stream.on("end", () => resolve([false, result]));
-    stream.on("close", () => resolve([false, result]));
-    stream.on("error", () => resolve([false, result]));
+    stream.on("end", () => done(false, result));
+    stream.on("close", () => done(false, result));
+    stream.on("error", () => done(false, result));
   });
 }
