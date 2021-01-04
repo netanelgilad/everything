@@ -6,5 +6,8 @@ export function fromEmitter<T>(eventEmitter: EventEmitter, eventName: string) {
   eventEmitter.on(eventName, (event) => {
     subject.onNext(event);
   });
+  eventEmitter.on("end", () => {
+    subject.onCompleted();
+  });
   return subject.iterator;
 }

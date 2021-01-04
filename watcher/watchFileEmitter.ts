@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import { watchFile } from "fs";
+import { unwatchFile, watchFile } from "fs";
 import { withCache } from "../withCache.ts";
 
 export const watchFileEmitter = withCache(function watchFileGenerator(
@@ -10,5 +10,11 @@ export const watchFileEmitter = withCache(function watchFileGenerator(
   watchFile(filename, () => {
     eventEmitter.emit("change");
   });
-  return eventEmitter;
+  return {
+    stop() {
+      unwatchFile(filename);
+      eventEmitter.emit("end");
+    },
+    eventEmitter,
+  };
 });

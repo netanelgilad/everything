@@ -17,7 +17,7 @@ import {
 import { executeProgram, forkProgram, logToConsole, stdout } from "@depno/host";
 import { Map } from "@depno/immutable";
 import { EventEmitter } from "events";
-import { readFileSync, watchFile, writeFileSync } from "fs";
+import { readFileSync, unwatchFile, watchFile, writeFileSync } from "fs";
 import { PassThrough } from "stream";
 import { canonicalIdentifier } from "../depno/executeExpressionWithScope/getExecutionProgramForDefinition/canonicalIdentifier.ts";
 import { canonicalName } from "../macros/canonicalName.ts";
@@ -54,6 +54,12 @@ export const inMemoryHost = Map([
     canonicalName(watchFile),
     definition((filename: string, cb: () => unknown) => {
       FilesystemState.watchers = FilesystemState.watchers.set(filename, cb);
+    }),
+  ],
+  [
+    canonicalName(unwatchFile),
+    definition((filename: string, cb: () => unknown) => {
+      FilesystemState.watchers = FilesystemState.watchers.delete(filename);
     }),
   ],
   [
