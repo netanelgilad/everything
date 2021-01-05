@@ -6,7 +6,7 @@ import {
 } from "@depno/core";
 import { forkProgram } from "@depno/host";
 import { Map } from "@depno/immutable";
-import { getExecutionProgramForDefinition } from "./getExecutionProgramForDefinition/$.ts";
+import { getExecutionProgramForClosure } from "./getExecutionProgramForClosure/$.ts";
 import { getExportedNamesInScope } from "./getExportedNamesInScope.ts";
 
 export async function executeExpressionWithScope(
@@ -16,7 +16,7 @@ export async function executeExpressionWithScope(
 ) {
   const namesInScope = await getExportedNamesInScope(scope);
   const referencesInExpression = getOutOfScopeReferences(expression);
-  const executionProgram = await getExecutionProgramForDefinition(
+  const executionProgram = await getExecutionProgramForClosure(
     Closure({
       expression,
       references: Map(

@@ -26,7 +26,7 @@ import { canonicalIdentifier } from "./canonicalIdentifier.ts";
 import { isMacroDefinition } from "./isMacroDefinition.ts";
 import { processMacros } from "./processMacros.ts";
 
-export async function getExecutionProgramForDefinition(
+export async function getExecutionProgramForClosure(
   closure: Closure,
   executeArtificialDefinitions: Map<CanonicalName, Definition> = Map()
 ) {

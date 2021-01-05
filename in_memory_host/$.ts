@@ -19,7 +19,7 @@ import { Map } from "@depno/immutable";
 import { EventEmitter } from "events";
 import { readFileSync, unwatchFile, watchFile, writeFileSync } from "fs";
 import { PassThrough } from "stream";
-import { canonicalIdentifier } from "../depno/executeExpressionWithScope/getExecutionProgramForDefinition/canonicalIdentifier.ts";
+import { canonicalIdentifier } from "../depno/executeExpressionWithScope/getExecutionProgramForClosure/canonicalIdentifier.ts";
 import { canonicalName } from "../macros/canonicalName.ts";
 import { definition } from "../macros/definition.ts";
 

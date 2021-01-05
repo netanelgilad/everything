@@ -12,11 +12,9 @@ import { forkProgram } from "@depno/host";
 import { Map } from "@depno/immutable";
 import { ChildProcess } from "child_process";
 import { resolve } from "path";
-import { inMemoryHost } from "../in_memory_host/$.ts";
 import { closure } from "../macros/closure.ts";
-import { replaceDefinitions } from "../replaceDefinitions/$.ts";
 import { runScenarios } from "../validator/runScenarios.ts";
-import { getExecutionProgramForDefinition } from "./executeExpressionWithScope/getExecutionProgramForDefinition/$.ts";
+import { getExecutionProgramForClosure } from "./executeExpressionWithScope/getExecutionProgramForClosure/$.ts";
 import { depnoSpec } from "./spec/index.ts";
 
 export async function build() {
@@ -48,8 +46,7 @@ export async function build() {
 }
 
 export function test() {
-  const inMemorySpec = replaceDefinitions(depnoSpec, inMemoryHost);
-  runScenarios(inMemorySpec);
+  runScenarios(depnoSpec);
 }
 
 async function runFile(
@@ -105,7 +102,7 @@ export async function executeCanonicalName(
     callExpression(identifier(mainFunctionName), mappedArgs)
   );
 
-  const program = await getExecutionProgramForDefinition(
+  const program = await getExecutionProgramForClosure(
     Closure({
       expression,
       references: Map([[mainFunctionName, canonicalName]]),
