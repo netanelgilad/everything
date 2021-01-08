@@ -31,6 +31,8 @@ export async function build() {
             return "__stdin__";
           } else if (x === "{stdout}") {
             return "__stdout__";
+          } else if (x === "{stderr}") {
+            return "__stderr__";
           } else {
             return JSON.parse(x);
           }
@@ -91,6 +93,8 @@ export async function executeCanonicalName(
       return memberExpression(identifier("process"), identifier("stdin"));
     } else if (x === "__stdout__") {
       return memberExpression(identifier("process"), identifier("stdout"));
+    } else if (x === "__stderr__") {
+      return memberExpression(identifier("process"), identifier("stderr"));
     } else {
       return stringLiteral(typeof x === "string" ? x : JSON.stringify(x));
     }
