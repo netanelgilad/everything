@@ -5,16 +5,16 @@ import {
   importDeclaration,
   importSpecifier,
   stringLiteral,
-} from "@depno/core";
-import { Map } from "@depno/immutable";
+} from "@opah/core";
+import { Map } from "@opah/immutable";
 import { builtinModules } from "module";
 import { getDefinitionFromExternalURI } from "./getDefinitionFromExternalURI/$.ts";
 
-const depnoAPIsURIs = [
+const opahAPIsURIs = [
   ...builtinModules,
-  "@depno/core",
-  "@depno/host",
-  "@depno/immutable",
+  "@opah/core",
+  "@opah/host",
+  "@opah/immutable",
 ];
 
 export const getDefinitionForCanonicalName = async (
@@ -23,7 +23,7 @@ export const getDefinitionForCanonicalName = async (
 ) => {
   if (artificialDefinitions.has(canonicalName)) {
     return artificialDefinitions.get(canonicalName)!;
-  } else if (depnoAPIsURIs.includes(canonicalName.uri)) {
+  } else if (opahAPIsURIs.includes(canonicalName.uri)) {
     return Definition({
       declaration: importDeclaration(
         [

@@ -18,8 +18,8 @@ import {
   stringLiteral,
   variableDeclaration,
   variableDeclarator,
-} from "@depno/core";
-import { List, Map, Set } from "@depno/immutable";
+} from "@opah/core";
+import { List, Map, Set } from "@opah/immutable";
 import { builtinModules } from "module";
 import { getDefinitionForCanonicalName } from "../../getDefinitionForCanonicalName.ts";
 import { canonicalIdentifier } from "./canonicalIdentifier.ts";
@@ -135,18 +135,18 @@ class DefinitionNotFoundInBundleError extends Error {
   }
 }
 
-const depnoAPIsURIs = [
+const opahAPIsURIs = [
   ...builtinModules,
-  "@depno/core",
-  "@depno/host",
-  "@depno/immutable",
+  "@opah/core",
+  "@opah/host",
+  "@opah/immutable",
 ];
 
 function declarationOfDefinition(
   canonicalName: CanonicalName,
   definition: Definition
 ) {
-  if (depnoAPIsURIs.includes(canonicalName.uri)) {
+  if (opahAPIsURIs.includes(canonicalName.uri)) {
     return importDeclaration(
       [
         importSpecifier(

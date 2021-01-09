@@ -8,8 +8,8 @@ import {
   objectExpression,
   objectProperty,
   stringLiteral,
-} from "@depno/core";
-import { Map } from "@depno/immutable";
+} from "@opah/core";
+import { Map } from "@opah/immutable";
 import { toAST } from "./toAST.ts";
 
 export const closure = createMacro(<T>(nodeClosure: Closure<T>) => {
@@ -41,21 +41,21 @@ export const closure = createMacro(<T>(nodeClosure: Closure<T>) => {
       [
         "Closure",
         CanonicalName({
-          uri: "@depno/core",
+          uri: "@opah/core",
           name: "Closure",
         }),
       ],
       [
         "Map",
         CanonicalName({
-          uri: "@depno/immutable",
+          uri: "@opah/immutable",
           name: "Map",
         }),
       ],
       [
         "CanonicalName",
         CanonicalName({
-          uri: "@depno/core",
+          uri: "@opah/core",
           name: "CanonicalName",
         }),
       ],

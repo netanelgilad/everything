@@ -3,7 +3,7 @@ import {
   FunctionDeclaration,
   ClassDeclaration,
   ExportDefaultDeclaration,
-} from "@depno/core";
+} from "@opah/core";
 
 export type ReferencedDefinitionNode =
   | VariableDeclarator

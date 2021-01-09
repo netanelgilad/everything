@@ -7,15 +7,15 @@ import {
   identifier,
   memberExpression,
   stringLiteral,
-} from "@depno/core";
-import { forkProgram } from "@depno/host";
-import { Map } from "@depno/immutable";
+} from "@opah/core";
+import { forkProgram } from "@opah/host";
+import { Map } from "@opah/immutable";
 import { ChildProcess } from "child_process";
 import { resolve } from "path";
 import { closure } from "../macros/closure.ts";
 import { runScenarios } from "../validator/runScenarios.ts";
 import { getExecutionProgramForClosure } from "./executeExpressionWithScope/getExecutionProgramForClosure/$.ts";
-import { depnoSpec } from "./spec/index.ts";
+import { opahSpec } from "./spec/index.ts";
 
 export async function build() {
   await buildExecutable(
@@ -48,7 +48,7 @@ export async function build() {
 }
 
 export function test() {
-  runScenarios(depnoSpec);
+  runScenarios(opahSpec);
 }
 
 async function runFile(

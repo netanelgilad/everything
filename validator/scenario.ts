@@ -1,4 +1,4 @@
-import { Closure } from "@depno/core";
+import { Closure } from "@opah/core";
 
 export type Scenario = {
   description: string;

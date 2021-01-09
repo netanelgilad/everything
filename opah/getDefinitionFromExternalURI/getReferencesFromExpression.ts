@@ -12,8 +12,8 @@ import {
   isVariableDeclarator,
   Node,
   Statement,
-} from "@depno/core";
-import { Map } from "@depno/immutable";
+} from "@opah/core";
+import { Map } from "@opah/immutable";
 import { isReferencedDefinitionNode } from "./isReferencedDefinitionNode.ts";
 import { ReferencedDefinitionNode } from "./ReferencedDefinitionNode.ts";
 import { resolveURIFromDependency } from "./resolveURIFromDependency.ts";

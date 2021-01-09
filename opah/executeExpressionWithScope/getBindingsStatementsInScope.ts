@@ -1,5 +1,5 @@
-import { getASTFromCode, getBindingsStatementsFromFileAST } from "@depno/core";
-import { Map } from "@depno/immutable";
+import { getASTFromCode, getBindingsStatementsFromFileAST } from "@opah/core";
+import { Map } from "@opah/immutable";
 import { getContentsFromURI } from "./getContentsFromURI.ts";
 
 export async function getBindingsStatementsInScope(scope: string) {

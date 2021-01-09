@@ -1,15 +1,15 @@
-import { CanonicalName, Closure, identifier } from "@depno/core";
+import { CanonicalName, Closure, identifier } from "@opah/core";
 import { writeFileSync } from "fs";
 import { join } from "path";
 import { someDirectory } from "../../abstracts/someDirectory.ts";
 import { someString } from "../../abstracts/someString.ts";
 import { closure } from "../../macros/closure.ts";
 import { scenario } from "../scenario.ts";
-import { Map } from "@depno/immutable";
+import { Map } from "@opah/immutable";
 import { runScenarios } from "../runScenarios.ts";
 import { assertThat } from "../../assertions/assertThat.ts";
 import { willStream } from "../../assertions/willStream.ts";
-import { stdout } from "@depno/host";
+import { stdout } from "@opah/host";
 
 export const watchModeScenarios = [
   scenario({

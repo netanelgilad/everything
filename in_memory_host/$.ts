@@ -13,15 +13,15 @@ import {
   program,
   variableDeclaration,
   variableDeclarator,
-} from "@depno/core";
+} from "@opah/core";
 import {
   executeProgram,
   forkProgram,
   logToConsole,
   stderr,
   stdout,
-} from "@depno/host";
-import { Map } from "@depno/immutable";
+} from "@opah/host";
+import { Map } from "@opah/immutable";
 import { EventEmitter } from "events";
 import {
   existsSync,
@@ -31,7 +31,7 @@ import {
   writeFileSync,
 } from "fs";
 import { PassThrough } from "stream";
-import { canonicalIdentifier } from "../depno/executeExpressionWithScope/getExecutionProgramForClosure/canonicalIdentifier.ts";
+import { canonicalIdentifier } from "../opah/executeExpressionWithScope/getExecutionProgramForClosure/canonicalIdentifier.ts";
 import { canonicalName } from "../macros/canonicalName.ts";
 import { definition } from "../macros/definition.ts";
 
@@ -88,7 +88,7 @@ export const inMemoryHost = Map([
       const replcaedStatements = executionProgram.body.map((statement) => {
         if (
           isImportDeclaration(statement) &&
-          statement.source.value === "@depno/host"
+          statement.source.value === "@opah/host"
         ) {
           return variableDeclaration("const", [
             variableDeclarator(
@@ -98,7 +98,7 @@ export const inMemoryHost = Map([
                     identifier(
                       canonicalIdentifier(
                         CanonicalName({
-                          uri: "@depno/host",
+                          uri: "@opah/host",
                           name: ((specifier as ImportSpecifier)
                             .imported as Identifier).name,
                         })
@@ -107,7 +107,7 @@ export const inMemoryHost = Map([
                     identifier(
                       canonicalIdentifier(
                         CanonicalName({
-                          uri: "@depno/host",
+                          uri: "@opah/host",
                           name: ((specifier as ImportSpecifier)
                             .imported as Identifier).name,
                         })
@@ -143,7 +143,7 @@ export const inMemoryHost = Map([
         toExecute({
           [canonicalIdentifier(
             CanonicalName({
-              uri: "@depno/host",
+              uri: "@opah/host",
               name: "logToConsole",
             })
           )]: (data: string) => {
@@ -151,13 +151,13 @@ export const inMemoryHost = Map([
           },
           [canonicalIdentifier(
             CanonicalName({
-              uri: "@depno/host",
+              uri: "@opah/host",
               name: "stdout",
             })
           )]: stdout,
           [canonicalIdentifier(
             CanonicalName({
-              uri: "@depno/host",
+              uri: "@opah/host",
               name: "stderr",
             })
           )]: stderr,

@@ -1,5 +1,5 @@
 import { fromEmitter } from "../axax/fromEmitter.ts";
-import { watchCanonicalNames } from "../depno/watchCanonicalName.ts";
+import { watchCanonicalNames } from "../opah/watchCanonicalName.ts";
 import { Scenario } from "./scenario.ts";
 
 export async function* watchScenario(scenario: Scenario) {

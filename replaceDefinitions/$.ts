@@ -1,6 +1,6 @@
-import { CanonicalName, Closure, createMacro, Definition } from "@depno/core";
-import { Map } from "@depno/immutable";
-import { executeClosureInContext } from "../depno/executeClosureInContext.ts";
+import { CanonicalName, Closure, createMacro, Definition } from "@opah/core";
+import { Map } from "@opah/immutable";
+import { executeClosureInContext } from "../opah/executeClosureInContext.ts";
 import { replaceInClosure } from "./replaceInClosure.ts";
 
 export const replaceDefinitions = createMacro(

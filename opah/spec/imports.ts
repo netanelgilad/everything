@@ -1,4 +1,4 @@
-import { callExpression, identifier } from "@depno/core";
+import { callExpression, identifier } from "@opah/core";
 import { writeFileSync } from "fs";
 import { join } from "path";
 import { someDirectory } from "../../abstracts/someDirectory.ts";
@@ -16,7 +16,7 @@ export const importsScenarios = [
       writeFileSync(
         join(directory, "index.ts"),
         `
-          import { logToConsole as myLog } from "@depno/host";
+          import { logToConsole as myLog } from "@opah/host";
     
           export function sayHello() {
             myLog("Hello");

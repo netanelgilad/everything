@@ -8,7 +8,7 @@ import {
   stringLiteral,
   NumericLiteral,
   booleanLiteral,
-} from "@depno/core";
+} from "@opah/core";
 
 export function toAST(obj: any): Expression {
   if (typeof obj === "object") {

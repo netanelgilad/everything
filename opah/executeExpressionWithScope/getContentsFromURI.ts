@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import { IncomingMessage } from "http";
 import { get } from "https";
-import { Map } from "@depno/immutable";
+import { Map } from "@opah/immutable";
 
 export type URIStore = Map<string, string>;
 

@@ -5,7 +5,7 @@ import {
   isIdentifier,
   isVariableDeclaration,
   VariableDeclaration,
-} from "@depno/core";
+} from "@opah/core";
 
 export function isMacroDefinition(
   definition: Definition
@@ -19,6 +19,6 @@ export function isMacroDefinition(
     ) &&
     definition.references
       .get(definition.declaration.declarations[0].init.callee.name)!
-      .equals(CanonicalName({ uri: "@depno/core", name: "createMacro" }))
+      .equals(CanonicalName({ uri: "@opah/core", name: "createMacro" }))
   );
 }

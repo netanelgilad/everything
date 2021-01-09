@@ -10,8 +10,8 @@ import {
   identifier,
   isIdentifier,
   replaceNodesByType,
-} from "@depno/core";
-import { Map } from "@depno/immutable";
+} from "@opah/core";
+import { Map } from "@opah/immutable";
 import { executeClosureInContext } from "../../executeClosureInContext.ts";
 import { getDefinitionForCanonicalName } from "../../getDefinitionForCanonicalName.ts";
 import { canonicalIdentifier } from "./canonicalIdentifier.ts";
@@ -29,7 +29,7 @@ export async function processMacros(
       !referenceCanonicalName.equals(canonicalName) &&
       !referenceCanonicalName.equals(
         CanonicalName({
-          uri: "@depno/core",
+          uri: "@opah/core",
           name: "createMacro",
         })
       ) &&

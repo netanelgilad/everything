@@ -11,8 +11,8 @@ import {
   stringLiteral,
   variableDeclaration,
   variableDeclarator,
-} from "@depno/core";
-import { Map } from "@depno/immutable";
+} from "@opah/core";
+import { Map } from "@opah/immutable";
 import { toAST } from "./toAST.ts";
 
 export const definition = createMacro((nodeClosure: Closure<any>) => {
@@ -54,21 +54,21 @@ export const definition = createMacro((nodeClosure: Closure<any>) => {
       [
         "Definition",
         CanonicalName({
-          uri: "@depno/core",
+          uri: "@opah/core",
           name: "Definition",
         }),
       ],
       [
         "Map",
         CanonicalName({
-          uri: "@depno/immutable",
+          uri: "@opah/immutable",
           name: "Map",
         }),
       ],
       [
         "CanonicalName",
         CanonicalName({
-          uri: "@depno/core",
+          uri: "@opah/core",
           name: "CanonicalName",
         }),
       ],

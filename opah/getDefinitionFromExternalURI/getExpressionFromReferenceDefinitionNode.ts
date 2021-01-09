@@ -7,7 +7,7 @@ import {
   classExpression,
   isExportDefaultDeclaration,
   isExpression,
-} from "@depno/core";
+} from "@opah/core";
 import { isReferencedDefinitionNode } from "./isReferencedDefinitionNode.ts";
 import { ReferencedDefinitionNode } from "./ReferencedDefinitionNode.ts";
 

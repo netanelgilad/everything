@@ -1,13 +1,13 @@
-import { Closure, ExpressionStatement, getASTFromCode } from "@depno/core";
-import { forkProgram, logToConsole } from "@depno/host";
-import { Map } from "@depno/immutable";
+import { Closure, ExpressionStatement, getASTFromCode } from "@opah/core";
+import { forkProgram, logToConsole } from "@opah/host";
+import { Map } from "@opah/immutable";
 import { ChildProcess } from "child_process";
 import { existsSync } from "fs";
 import { join } from "path";
 import { createInterface } from "readline";
 import { Readable, Writable } from "stream";
-import { executeExpressionWithScope } from "../depno/executeExpressionWithScope/$.ts";
-import { getExecutionProgramForClosure } from "../depno/executeExpressionWithScope/getExecutionProgramForClosure/$.ts";
+import { executeExpressionWithScope } from "../opah/executeExpressionWithScope/$.ts";
+import { getExecutionProgramForClosure } from "../opah/executeExpressionWithScope/getExecutionProgramForClosure/$.ts";
 
 export async function open(
   stdin: Readable,

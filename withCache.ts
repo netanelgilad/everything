@@ -1,4 +1,4 @@
-import { Map } from "@depno/immutable";
+import { Map } from "@opah/immutable";
 
 export function withCache<TParam, TResult>(fn: (param: TParam) => TResult) {
   let cache = Map<TParam, TResult>();

@@ -5,8 +5,8 @@ import {
   createMacro,
   Identifier,
   identifier,
-} from "@depno/core";
-import { Map } from "@depno/immutable";
+} from "@opah/core";
+import { Map } from "@opah/immutable";
 import { toAST } from "./toAST.ts";
 
 export const canonicalName = createMacro((node: Closure<any>) => {
@@ -20,7 +20,7 @@ export const canonicalName = createMacro((node: Closure<any>) => {
       [
         "CanonicalName",
         CanonicalName({
-          uri: "@depno/core",
+          uri: "@opah/core",
           name: "CanonicalName",
         }),
       ],

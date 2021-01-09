@@ -3,9 +3,9 @@ import {
   Closure,
   Expression,
   getOutOfScopeReferences,
-} from "@depno/core";
-import { forkProgram } from "@depno/host";
-import { Map } from "@depno/immutable";
+} from "@opah/core";
+import { forkProgram } from "@opah/host";
+import { Map } from "@opah/immutable";
 import { getExecutionProgramForClosure } from "./getExecutionProgramForClosure/$.ts";
 import { getExportedNamesInScope } from "./getExportedNamesInScope.ts";
 

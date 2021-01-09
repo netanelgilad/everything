@@ -1,7 +1,7 @@
-import { CanonicalName, Closure, Definition } from "@depno/core";
-import { Map, Set } from "@depno/immutable";
+import { CanonicalName, Closure, Definition } from "@opah/core";
+import { Map, Set } from "@opah/immutable";
 import { randomBytes } from "crypto";
-import { getDefinitionForCanonicalName } from "../depno/getDefinitionForCanonicalName.ts";
+import { getDefinitionForCanonicalName } from "../opah/getDefinitionForCanonicalName.ts";
 
 export async function replaceInClosure<T>(
   closure: Closure<T>,

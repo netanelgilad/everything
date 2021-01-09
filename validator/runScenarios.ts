@@ -1,7 +1,7 @@
-import { logToConsole } from "@depno/host";
+import { logToConsole } from "@opah/host";
 import { concurrentMap } from "../axax/concurrentMap.ts";
 import { merge } from "../axax/merge.ts";
-import { executeClosureInContext } from "../depno/executeClosureInContext.ts";
+import { executeClosureInContext } from "../opah/executeClosureInContext.ts";
 import { inMemoryHost } from "../in_memory_host/$.ts";
 import { replaceInClosure } from "../replaceDefinitions/replaceInClosure.ts";
 import { Scenario } from "./scenario.ts";

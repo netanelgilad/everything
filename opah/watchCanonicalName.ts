@@ -1,5 +1,5 @@
-import { CanonicalName } from "@depno/core";
-import { Set } from "@depno/immutable";
+import { CanonicalName } from "@opah/core";
+import { Set } from "@opah/immutable";
 import { EventEmitter } from "events";
 import { writeFileSync } from "fs";
 import { join } from "path";

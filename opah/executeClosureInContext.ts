@@ -1,6 +1,6 @@
-import { CanonicalName, Closure, Definition } from "@depno/core";
-import { executeProgram } from "@depno/host";
-import { Map } from "@depno/immutable";
+import { CanonicalName, Closure, Definition } from "@opah/core";
+import { executeProgram } from "@opah/host";
+import { Map } from "@opah/immutable";
 import { getExecutionProgramForClosure } from "./executeExpressionWithScope/getExecutionProgramForClosure/$.ts";
 
 export async function executeClosureInContext<TReturn>(

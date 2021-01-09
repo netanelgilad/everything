@@ -4,7 +4,7 @@ import {
   isFunctionDeclaration,
   isClassDeclaration,
   isExportDefaultDeclaration,
-} from "@depno/core";
+} from "@opah/core";
 import { ReferencedDefinitionNode } from "./ReferencedDefinitionNode.ts";
 
 export function isReferencedDefinitionNode(

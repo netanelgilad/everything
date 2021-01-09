@@ -1,4 +1,4 @@
-import { CanonicalName } from "@depno/core";
+import { CanonicalName } from "@opah/core";
 
 function sanitizeURI(uri: string) {
   return uri

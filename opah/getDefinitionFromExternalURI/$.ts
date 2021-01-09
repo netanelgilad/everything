@@ -13,7 +13,7 @@ import {
   isVariableDeclarator,
   variableDeclaration,
   variableDeclarator,
-} from "@depno/core";
+} from "@opah/core";
 import { getBindingsStatementsInScope } from "../executeExpressionWithScope/getBindingsStatementsInScope.ts";
 import { getReferencesFromReferencedDefinitionNode } from "./getReferencesFromExpression.ts";
 import { isReferencedDefinitionNode } from "./isReferencedDefinitionNode.ts";

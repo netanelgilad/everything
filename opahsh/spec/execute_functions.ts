@@ -1,4 +1,4 @@
-import { forkProgram } from "@depno/host";
+import { forkProgram } from "@opah/host";
 import { writeFileSync } from "fs";
 import { join } from "path";
 import { stdin, stdout } from "process";
@@ -7,21 +7,21 @@ import { someDirectory } from "../../abstracts/someDirectory.ts";
 import { someString } from "../../abstracts/someString.ts";
 import { assertThat } from "../../assertions/assertThat.ts";
 import { willStream } from "../../assertions/willStream.ts";
-import { getExecutionProgramForClosure } from "../../depno/executeExpressionWithScope/getExecutionProgramForClosure/$.ts";
+import { getExecutionProgramForClosure } from "../../opah/executeExpressionWithScope/getExecutionProgramForClosure/$.ts";
 import { closure } from "../../macros/closure.ts";
 import { scenario } from "../../validator/scenario.ts";
 import { open } from "../open.ts";
 
 export const executeFunctionsInMemoryScenarios = [
   scenario({
-    description: `should allow running a function from a depno file`,
+    description: `should allow running a function from a opah file`,
     verify: closure(async () => {
       const directory = someDirectory();
       const expectedOutput = someString();
       writeFileSync(
         join(directory, "index.ts"),
         `
-            import { logToConsole } from "@depno/host";
+            import { logToConsole } from "@opah/host";
             export function sayHello() { logToConsole("${expectedOutput}"); }
             `
       );
@@ -43,7 +43,7 @@ export const executeFunctionsInMemoryScenarios = [
       writeFileSync(
         join(directory, "index.ts"),
         `
-            import { stderr } from "@depno/host";
+            import { stderr } from "@opah/host";
             export function writeToStderr() { stderr.write("${expectedOutput}") }
             `
       );
