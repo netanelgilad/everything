@@ -4,10 +4,11 @@ import { closure } from "../macros/closure.ts";
 import { runScenarios } from "../validator/runScenarios.ts";
 import { open } from "./open.ts";
 import { depnoshSpec } from "./spec/index.ts";
+import { stderr, stdout } from "@depno/host";
 
 export function build() {
   buildExecutable(
-    closure(() => open(process.stdin, process.stdout, process.cwd())),
+    closure(() => open(process.stdin, stdout, stderr, process.cwd())),
     {
       target: "host",
       output: "./target/opahsh",
@@ -19,6 +20,6 @@ export function test() {
   runScenarios(depnoshSpec);
 }
 
-export function run(stdin: Readable, stdout: Writable) {
-  open(stdin, stdout, "/Users/netanelg/Development/depno-shell");
+export function run(stdin: Readable, stdout: Writable, stderr: Writable) {
+  open(stdin, stdout, stderr, "/Users/netanelg/Development/depno-shell");
 }

@@ -18,7 +18,7 @@ export const builtinCommandsScenarios = [
       const stdin = new PassThrough();
       const stdout = new PassThrough();
       const stdinBeforeOpenEventsListernsCount = getEventsListernsCount(stdin);
-      open(stdin, stdout, directory);
+      open(stdin, stdout, new PassThrough(), directory);
       await assertThat(
         stdin,
         not(hasEventsListernsCount(stdinBeforeOpenEventsListernsCount))

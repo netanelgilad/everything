@@ -6,7 +6,12 @@ import { createInterface } from "readline";
 import { Readable, Writable } from "stream";
 import { executeExpressionWithScope } from "../depno/executeExpressionWithScope/$.ts";
 
-export async function open(stdin: Readable, stdout: Writable, cwd: string) {
+export async function open(
+  stdin: Readable,
+  stdout: Writable,
+  stderr: Writable,
+  cwd: string
+) {
   const rl = createInterface({
     input: stdin,
     output: stdout,
@@ -29,7 +34,7 @@ export async function open(stdin: Readable, stdout: Writable, cwd: string) {
       return;
     } else if (input !== "") {
       try {
-        await handleCommand(input, cwd, stdout);
+        await handleCommand(input, cwd, stdout, stderr);
       } catch {}
     }
     rl.prompt();
@@ -39,7 +44,8 @@ export async function open(stdin: Readable, stdout: Writable, cwd: string) {
 export async function handleCommand(
   command: string,
   cwd: string,
-  stdout: Writable
+  stdout: Writable,
+  stderr: Writable
 ) {
   const currentScopePath = join(cwd, "index.ts");
   const commandExpression = ((
@@ -51,6 +57,7 @@ export async function handleCommand(
     cwd
   );
   childProcess.stdout!.pipe(stdout);
+  childProcess.stderr!.pipe(stderr);
   return new Promise((resolve) => {
     childProcess.on("exit", resolve);
   });

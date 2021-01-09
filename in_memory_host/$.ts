@@ -14,7 +14,13 @@ import {
   variableDeclaration,
   variableDeclarator,
 } from "@depno/core";
-import { executeProgram, forkProgram, logToConsole, stdout } from "@depno/host";
+import {
+  executeProgram,
+  forkProgram,
+  logToConsole,
+  stderr,
+  stdout,
+} from "@depno/host";
 import { Map } from "@depno/immutable";
 import { EventEmitter } from "events";
 import { readFileSync, unwatchFile, watchFile, writeFileSync } from "fs";
@@ -24,6 +30,7 @@ import { canonicalName } from "../macros/canonicalName.ts";
 import { definition } from "../macros/definition.ts";
 
 const inMemoryStdout = new PassThrough();
+const inMemoryStderr = new PassThrough();
 
 export const inMemoryHost = Map([
   [
@@ -33,6 +40,7 @@ export const inMemoryHost = Map([
     }),
   ],
   [canonicalName(stdout), definition(inMemoryStdout)],
+  [canonicalName(stderr), definition(inMemoryStderr)],
   [
     canonicalName(writeFileSync),
     definition((path: string, contents: string) => {
@@ -117,6 +125,7 @@ export const inMemoryHost = Map([
         "module"
       );
       const stdout = new PassThrough();
+      const stderr = new PassThrough();
       const toExecute = executeProgram(replacePrgoram);
       const promise = Promise.resolve(
         toExecute({
@@ -128,6 +137,18 @@ export const inMemoryHost = Map([
           )]: (data: string) => {
             stdout.push(data);
           },
+          [canonicalIdentifier(
+            CanonicalName({
+              uri: "@depno/host",
+              name: "stdout",
+            })
+          )]: stdout,
+          [canonicalIdentifier(
+            CanonicalName({
+              uri: "@depno/host",
+              name: "stderr",
+            })
+          )]: stderr,
         })
       );
       const eventEmitter = new EventEmitter();
@@ -136,6 +157,7 @@ export const inMemoryHost = Map([
       });
       return {
         stdout,
+        stderr,
         on: eventEmitter.on.bind(eventEmitter),
       };
     }),
