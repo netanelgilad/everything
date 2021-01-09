@@ -23,7 +23,13 @@ import {
 } from "@depno/host";
 import { Map } from "@depno/immutable";
 import { EventEmitter } from "events";
-import { readFileSync, unwatchFile, watchFile, writeFileSync } from "fs";
+import {
+  existsSync,
+  readFileSync,
+  unwatchFile,
+  watchFile,
+  writeFileSync,
+} from "fs";
 import { PassThrough } from "stream";
 import { canonicalIdentifier } from "../depno/executeExpressionWithScope/getExecutionProgramForClosure/canonicalIdentifier.ts";
 import { canonicalName } from "../macros/canonicalName.ts";
@@ -56,6 +62,12 @@ export const inMemoryHost = Map([
     canonicalName(readFileSync),
     definition((path: string) => {
       return FilesystemState.filesystem.get(path);
+    }),
+  ],
+  [
+    canonicalName(existsSync),
+    definition((path: string) => {
+      return FilesystemState.filesystem.has(path);
     }),
   ],
   [
@@ -158,6 +170,9 @@ export const inMemoryHost = Map([
       return {
         stdout,
         stderr,
+        kill(signal: string) {
+          eventEmitter.emit(signal);
+        },
         on: eventEmitter.on.bind(eventEmitter),
       };
     }),

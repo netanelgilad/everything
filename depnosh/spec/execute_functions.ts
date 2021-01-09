@@ -1,15 +1,18 @@
+import { forkProgram } from "@depno/host";
 import { writeFileSync } from "fs";
 import { join } from "path";
+import { stdin, stdout } from "process";
 import { PassThrough } from "stream";
 import { someDirectory } from "../../abstracts/someDirectory.ts";
 import { someString } from "../../abstracts/someString.ts";
 import { assertThat } from "../../assertions/assertThat.ts";
 import { willStream } from "../../assertions/willStream.ts";
+import { getExecutionProgramForClosure } from "../../depno/executeExpressionWithScope/getExecutionProgramForClosure/$.ts";
 import { closure } from "../../macros/closure.ts";
 import { scenario } from "../../validator/scenario.ts";
 import { open } from "../open.ts";
 
-export const scenarios = [
+export const executeFunctionsInMemoryScenarios = [
   scenario({
     description: `should allow running a function from a depno file`,
     verify: closure(async () => {
@@ -24,7 +27,8 @@ export const scenarios = [
       );
       const stdin = new PassThrough();
       const stdout = new PassThrough();
-      open(stdin, stdout, new PassThrough(), directory);
+      const stderr = new PassThrough();
+      open(stdin, stdout, stderr, directory);
       await assertThat(stdout, willStream("$ "));
       stdin.write("sayHello()\n");
       await assertThat(stdout, willStream(expectedOutput));
@@ -50,6 +54,26 @@ export const scenarios = [
       await assertThat(stdout, willStream("$ "));
       stdin.write(`writeToStderr()\n`);
       await assertThat(stderr, willStream(expectedOutput));
+    }),
+  }),
+];
+
+export const executeFunctionsE2EScenarios = [
+  scenario({
+    description: "should send SIGINT to program when receiving SIGINT",
+    verify: closure(async () => {
+      const run = closure(open(stdin, stdout, new PassThrough(), "/"));
+      const childProcess = forkProgram(
+        await getExecutionProgramForClosure(run),
+        "/",
+        true
+      );
+      await assertThat(childProcess.stdout!, willStream("$ "));
+      childProcess.stdin!.write(
+        "setInterval(() => { console.log('hey') }, 1000)\n"
+      );
+      childProcess.kill("SIGINT");
+      await assertThat(childProcess.stdout!, willStream("\n$ "));
     }),
   }),
 ];

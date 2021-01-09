@@ -1,10 +1,13 @@
-import { ExpressionStatement, getASTFromCode } from "@depno/core";
-import { logToConsole } from "@depno/host";
+import { Closure, ExpressionStatement, getASTFromCode } from "@depno/core";
+import { forkProgram, logToConsole } from "@depno/host";
 import { Map } from "@depno/immutable";
+import { ChildProcess } from "child_process";
+import { existsSync } from "fs";
 import { join } from "path";
 import { createInterface } from "readline";
 import { Readable, Writable } from "stream";
 import { executeExpressionWithScope } from "../depno/executeExpressionWithScope/$.ts";
+import { getExecutionProgramForClosure } from "../depno/executeExpressionWithScope/getExecutionProgramForClosure/$.ts";
 
 export async function open(
   stdin: Readable,
@@ -12,17 +15,25 @@ export async function open(
   stderr: Writable,
   cwd: string
 ) {
+  let currentRunningProcess: ChildProcess;
+
   const rl = createInterface({
     input: stdin,
     output: stdout,
   });
 
-  rl.on("SIGINT", () => {
+  const sigintListener = () => {
+    if (currentRunningProcess) {
+      currentRunningProcess.kill("SIGINT");
+    }
     logToConsole();
     // @ts-expect-error
     rl.line = "";
     rl.prompt();
-  });
+  };
+
+  rl.on("SIGINT", sigintListener);
+  process.on("SIGINT", sigintListener);
 
   rl.setPrompt("$ ");
   rl.prompt();
@@ -34,7 +45,10 @@ export async function open(
       return;
     } else if (input !== "") {
       try {
-        await handleCommand(input, cwd, stdout, stderr);
+        currentRunningProcess = await handleCommand(input, cwd, stdout, stderr);
+        await new Promise((resolve) => {
+          currentRunningProcess.on("exit", resolve);
+        });
       } catch {}
     }
     rl.prompt();
@@ -51,14 +65,24 @@ export async function handleCommand(
   const commandExpression = ((
     await getASTFromCode(Map(), command, currentScopePath)
   )[1].program.body[0] as ExpressionStatement).expression;
-  const childProcess = await executeExpressionWithScope(
-    commandExpression,
-    currentScopePath,
-    cwd
-  );
+
+  let childProcess: ChildProcess;
+  if (existsSync(currentScopePath)) {
+    childProcess = await executeExpressionWithScope(
+      commandExpression,
+      currentScopePath,
+      cwd
+    );
+  } else {
+    const executionProgram = await getExecutionProgramForClosure(
+      Closure({
+        expression: commandExpression,
+        references: Map(),
+      })
+    );
+    childProcess = forkProgram(executionProgram, cwd, true);
+  }
   childProcess.stdout!.pipe(stdout);
   childProcess.stderr!.pipe(stderr);
-  return new Promise((resolve) => {
-    childProcess.on("exit", resolve);
-  });
+  return childProcess;
 }

@@ -7,13 +7,16 @@ import { replaceInClosure } from "../replaceDefinitions/replaceInClosure.ts";
 import { Scenario } from "./scenario.ts";
 import { watchScenario } from "./watchScenario.ts";
 
-export async function runScenarios(scenarios: Array<Scenario>) {
+export async function runScenarios(
+  scenarios: Array<Scenario>,
+  replacements = inMemoryHost
+) {
   await concurrentMap(async (scenario: Scenario) => {
     logToConsole("🏃", scenario.description);
     try {
       const [inMemoryClosure, artificialDefinitions] = await replaceInClosure(
         scenario.verify,
-        inMemoryHost
+        replacements
       );
       const inMemoryVerifyFn = await executeClosureInContext(
         inMemoryClosure,
