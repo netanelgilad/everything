@@ -15,19 +15,29 @@ import { withCache } from "../withCache.ts";
 import { getDefinitionForCanonicalName } from "./getDefinitionForCanonicalName.ts";
 
 async function getReferencesRecursively(
-  canonicalNames: Set<CanonicalName>,
-  seenNames: Set<CanonicalName> = Set()
+  canonicalNames: Set<CanonicalName>
 ): Promise<Set<CanonicalName>> {
-  return await canonicalNames.reduce(async (result, reference) => {
-    if (seenNames.has(reference)) return Set();
-    const definition = await getDefinitionForCanonicalName(reference);
-    return (await result).merge(
-      await getReferencesRecursively(
-        definition.references.valueSeq().toSet(),
-        seenNames.concat(canonicalNames)
-      )
-    );
-  }, Promise.resolve(canonicalNames));
+  let result = Set<CanonicalName>();
+  let references = canonicalNames;
+  while (references.size > 0) {
+    const reference = references.first(false);
+    if (!reference) {
+      throw new Error("ImpossibleState");
+    }
+    if (!result.has(reference)) {
+      const definitionOfReference = await getDefinitionForCanonicalName(
+        reference
+      );
+      result = result.add(reference);
+      references = references.concat(
+        definitionOfReference.references.valueSeq().toSet()
+      );
+    }
+
+    references = references.remove(reference);
+  }
+
+  return result;
 }
 
 export const watchCanonicalNames = withCache(async function watchCanonicalNames(
