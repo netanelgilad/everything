@@ -101,11 +101,6 @@ function withoutId(node: ReferencedDefinitionNode): Node {
     }
     return node.init;
   } else {
-    if (!isReferencedDefinitionNode(node.declaration)) {
-      throw new Error(
-        `export default of non referenced node: ${node.declaration}`
-      );
-    }
-    return withoutId(node.declaration);
+    return node.declaration;
   }
 }

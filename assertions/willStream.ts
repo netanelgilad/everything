@@ -11,3 +11,20 @@ export function willStream(expected: string) {
     );
   });
 }
+
+export function willStreamToCompletion(expected: string) {
+  return assertion(async (actual: Readable) => {
+    let result = "";
+    let currentPosition = 0;
+    for await (const chunk of actual) {
+      const chunkAsString = String(chunk);
+      result += chunkAsString;
+      currentPosition += chunkAsString.length;
+
+      assert.strictEqual(
+        expected.substr(0, currentPosition),
+        result.substr(0, currentPosition)
+      );
+    }
+  });
+}

@@ -10,11 +10,10 @@ import {
 } from "@opah/core";
 import { forkProgram } from "@opah/host";
 import { Map } from "@opah/immutable";
-import { ChildProcess } from "child_process";
-import { resolve } from "path";
 import { closure } from "../macros/closure.ts";
 import { runScenarios } from "../validator/runScenarios.ts";
 import { getExecutionProgramForClosure } from "./executeExpressionWithScope/getExecutionProgramForClosure/$.ts";
+import { runFile } from "./runFile.ts";
 import { opahSpec } from "./spec/index.ts";
 
 export async function build() {
@@ -49,33 +48,6 @@ export async function build() {
 
 export function test() {
   runScenarios(opahSpec);
-}
-
-async function runFile(
-  path: string,
-  opts: {
-    exportedFunctionName?: string;
-    args?: any[];
-    cwd?: string;
-    silent?: boolean;
-  } = {}
-): Promise<ChildProcess> {
-  const silent = opts.silent ?? true;
-  const args = opts.args ?? [];
-  const exportedFunctionName = opts.exportedFunctionName ?? "default";
-  const uri = path.startsWith(".")
-    ? resolve(opts.cwd || process.cwd(), path)
-    : path;
-
-  const functionCanonicalName = CanonicalName({
-    uri,
-    name: exportedFunctionName,
-  });
-
-  return executeCanonicalName(functionCanonicalName, args, {
-    cwd: opts.cwd,
-    silent,
-  });
 }
 
 export async function executeCanonicalName(
