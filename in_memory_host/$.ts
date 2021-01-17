@@ -165,6 +165,8 @@ export const inMemoryHost = Map([
       );
       const eventEmitter = new EventEmitter();
       promise.then(() => {
+        stdout.end();
+        stderr.end();
         eventEmitter.emit("exit");
       });
       return {
