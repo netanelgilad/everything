@@ -1,3 +1,4 @@
+import { Spec_resolveUIFromDependency } from "../getDefinitionFromExternalURI/resolveURIFromDependency.ts";
 import { Spec_watchCanonicalName } from "../watchCanonicalName.ts";
 import { importsScenarios } from "./imports.ts";
 import { reexportScenarios } from "./reexports.ts";
@@ -8,4 +9,5 @@ export const opahSpec = [
   ...Spec_watchCanonicalName,
   ...runningFilesScenarios,
   ...reexportScenarios,
+  ...Spec_resolveUIFromDependency,
 ];
