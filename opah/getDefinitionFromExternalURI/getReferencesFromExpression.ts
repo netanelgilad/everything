@@ -80,6 +80,7 @@ const globals = [
   "String",
   "process",
   "Symbol",
+  "Math",
 ];
 
 type LocalName = string;
