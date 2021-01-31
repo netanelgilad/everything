@@ -1,7 +1,17 @@
-import { CanonicalName } from "@opah/core";
+import {
+  callExpression,
+  CanonicalName,
+  Closure,
+  expressionStatement,
+  identifier,
+  memberExpression,
+  stringLiteral,
+} from "@opah/core";
+import { forkProgram } from "@opah/host";
 import { ChildProcess } from "child_process";
 import { resolve } from "path";
-import { executeCanonicalName } from "./dev.ts";
+import { getExecutionProgramForClosure } from "./executeExpressionWithScope/getExecutionProgramForClosure/$.ts";
+import { Map } from "@opah/immutable";
 
 export async function runFile(
   path: string,
@@ -28,4 +38,42 @@ export async function runFile(
     cwd: opts.cwd,
     silent,
   });
+}
+
+async function executeCanonicalName(
+  canonicalName: CanonicalName,
+  args: any[] = [],
+  opts: {
+    cwd?: string;
+    silent?: boolean;
+  } = {
+    silent: true,
+  }
+) {
+  const mappedArgs = args.map((x) => {
+    if (x === "__stdin__") {
+      return memberExpression(identifier("process"), identifier("stdin"));
+    } else if (x === "__stdout__") {
+      return memberExpression(identifier("process"), identifier("stdout"));
+    } else if (x === "__stderr__") {
+      return memberExpression(identifier("process"), identifier("stderr"));
+    } else {
+      return stringLiteral(typeof x === "string" ? x : JSON.stringify(x));
+    }
+  });
+
+  const mainFunctionName = "main";
+
+  const { expression } = expressionStatement(
+    callExpression(identifier(mainFunctionName), mappedArgs)
+  );
+
+  const program = await getExecutionProgramForClosure(
+    Closure({
+      expression,
+      references: Map([[mainFunctionName, canonicalName]]),
+    })
+  );
+
+  return forkProgram(program, opts.cwd || process.cwd());
 }
