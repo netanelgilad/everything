@@ -1,4 +1,6 @@
 import {
+  arrowFunctionExpression,
+  awaitExpression,
   callExpression,
   CanonicalName,
   Closure,
@@ -8,10 +10,10 @@ import {
   stringLiteral,
 } from "@opah/core";
 import { forkProgram } from "@opah/host";
+import { Map } from "@opah/immutable";
 import { ChildProcess } from "child_process";
 import { resolve } from "path";
 import { getExecutionProgramForClosure } from "./executeExpressionWithScope/getExecutionProgramForClosure/$.ts";
-import { Map } from "@opah/immutable";
 
 export async function runFile(
   path: string,
@@ -41,7 +43,7 @@ export async function runFile(
 }
 
 async function executeCanonicalName(
-  canonicalName: CanonicalName,
+  name: CanonicalName,
   args: any[] = [],
   opts: {
     cwd?: string;
@@ -65,13 +67,30 @@ async function executeCanonicalName(
   const mainFunctionName = "main";
 
   const { expression } = expressionStatement(
-    callExpression(identifier(mainFunctionName), mappedArgs)
+    callExpression(
+      arrowFunctionExpression(
+        [],
+        callExpression(identifier("logToConsole"), [
+          awaitExpression(
+            callExpression(identifier(mainFunctionName), mappedArgs)
+          ),
+        ]),
+        true
+      ),
+      []
+    )
   );
 
   const program = await getExecutionProgramForClosure(
     Closure({
       expression,
-      references: Map([[mainFunctionName, canonicalName]]),
+      references: Map([
+        [mainFunctionName, name],
+        [
+          "logToConsole",
+          CanonicalName({ uri: "@opah/host", name: "logToConsole" }), // this should be using the canonicalName macro, but since the macro isn't calculated at the correct time at the moment, and the logToConsole reference can be replaced under the hood
+        ],
+      ]),
     })
   );
 

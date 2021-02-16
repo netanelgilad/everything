@@ -29,4 +29,25 @@ export const runningFilesScenarios = [
       await assertThat(childProcess.stdout!, willStreamToCompletion("Hello"));
     }),
   }),
+
+  scenario({
+    description: "Should log the result of the function called",
+    verify: closure(async () => {
+      const directory = someDirectory();
+      writeFileSync(
+        join(directory, "index.ts"),
+        `
+          export default () => {
+            return "the output"
+          }
+          `
+      );
+
+      const childProcess = await runFile(join(directory, "index.ts"));
+      await assertThat(
+        childProcess.stdout!,
+        willStreamToCompletion("the output")
+      );
+    }),
+  }),
 ];

@@ -26,5 +26,6 @@ export function willStreamToCompletion(expected: string) {
         result.substr(0, currentPosition)
       );
     }
+    assert.strictEqual(result.length, expected.length);
   });
 }
