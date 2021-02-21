@@ -28,9 +28,14 @@ export function memoizeInFS<T extends (...args: any[]) => any>(
     if (!inProgress[hash]) {
       inProgress[hash] = new Promise(async (resolve) => {
         if (existsSync(`./cache/${hash}`)) {
-          resolve(
-            JSON.parse(readFileSync(`./cache/${hash}`, "utf8"))
-          ) as ReturnType<T>;
+          const cachedResult = readFileSync(`./cache/${hash}`, "utf8");
+          if (cachedResult === "undefined") {
+            resolve(undefined);
+          } else {
+            resolve(
+              JSON.parse(readFileSync(`./cache/${hash}`, "utf8"))
+            ) as ReturnType<T>;
+          }
         } else {
           const result = await fn(...args);
           delete inProgress[hash];
