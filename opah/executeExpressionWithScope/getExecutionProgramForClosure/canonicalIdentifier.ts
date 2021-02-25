@@ -7,7 +7,7 @@ function sanitizeURI(uri: string) {
     .replace(/\./g, "$___")
     .replace(/@/g, "$____")
     .replace(/:/g, "$_____")
-    .replace(/-/, "$______");
+    .replace(/-/g, "$______");
 }
 
 const separator = "$$$";
