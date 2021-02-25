@@ -82,6 +82,7 @@ const globals = [
   "Symbol",
   "Math",
   "Number",
+  "RegExp",
 ];
 
 type LocalName = string;
