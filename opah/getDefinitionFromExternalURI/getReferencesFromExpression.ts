@@ -14,7 +14,6 @@ import {
   Statement,
 } from "@opah/core";
 import { Map } from "@opah/immutable";
-import { isReferencedDefinitionNode } from "./isReferencedDefinitionNode.ts";
 import { ReferencedDefinitionNode } from "./ReferencedDefinitionNode.ts";
 import { resolveURIFromDependency } from "./resolveURIFromDependency.ts";
 
@@ -83,6 +82,8 @@ const globals = [
   "Math",
   "Number",
   "RegExp",
+  "Infinity",
+  "setImmediate",
 ];
 
 type LocalName = string;
