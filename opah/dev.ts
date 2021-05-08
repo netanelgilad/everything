@@ -13,7 +13,7 @@ import { getExecutionProgramForClosure } from "./executeExpressionWithScope/getE
 import { runFile } from "./runFile.ts";
 import { opahSpec } from "./spec/index.ts";
 
-export async function build() {
+export async function build(target: "host" | "node14-linux" = "host") {
   const opahClosure = closure(async (argv: string[]) => {
     const fileToRun = argv[2];
     const exportedFunctionName = argv[3];
@@ -54,8 +54,8 @@ export async function build() {
       "@opah/immutable": join(opahHostDir, "dist/immutable"),
     },
     {
-      target: "host",
-      output: "target/opah",
+      target,
+      output: `target/${target}/opah`,
     }
   );
 }
