@@ -4,6 +4,7 @@ import { tmpdir } from "os";
 import { join } from "path";
 import { createGunzip } from "zlib";
 import { httpRequest } from "../http/httpRequest.ts";
+import { URLString } from "../http/HttpTarget.ts";
 import { cryotoRandomString } from "../random/cryptoRandomString.ts";
 import { emptyReadable } from "../streams/emptyReadable.ts";
 import { extract } from "../tar/extract.ts";
@@ -11,7 +12,7 @@ import { extract } from "../tar/extract.ts";
 export async function downloadOpahHost(version: string) {
   const theTarStream = await httpRequest({
     target: {
-      url: `https://registry.npmjs.org/opah-host/-/opah-host-${version}.tgz`,
+      url: `https://registry.npmjs.org/opah-host/-/opah-host-${version}.tgz` as URLString,
     },
     method: "GET",
     data: emptyReadable(),
