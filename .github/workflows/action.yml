@@ -1,0 +1,8 @@
+# action.yml
+name: "Opah"
+description: "Run an opah function"
+runs:
+  using: "docker"
+  image: netanelgilad/opah
+  args:
+    - ./.github/actions.ts
