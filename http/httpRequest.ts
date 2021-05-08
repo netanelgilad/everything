@@ -1,26 +1,13 @@
 import { Readable } from "stream";
 import { request, IncomingMessage, ClientRequest } from "http";
-
-export type HostAndPathTarget = {
-  host: string;
-  path?: string;
-  search?: string;
-};
+import { HTTPTarget } from "./HttpTarget.ts";
 
 export type HTTPRequestBase = {
   method: "GET" | "DELETE" | "POST" | "PUT" | "PATCH";
   headers?: {
     [name: string]: string;
   };
-  target:
-    | {
-        socketPath: string;
-        path: string;
-      }
-    | {
-        url: string;
-      }
-    | HostAndPathTarget;
+  target: HTTPTarget;
 };
 
 export async function httpRequest(

@@ -15,7 +15,7 @@ import {
 import { Map } from "@opah/immutable";
 import { toAST } from "./toAST.ts";
 
-export const definition = createMacro((nodeClosure: Closure<any>) => {
+export const definitionFn = (nodeClosure: Closure<any>) => {
   return Closure<Definition>({
     expression: callExpression(identifier("Definition"), [
       objectExpression([
@@ -74,4 +74,5 @@ export const definition = createMacro((nodeClosure: Closure<any>) => {
       ],
     ]),
   });
-});
+};
+export const definition = createMacro(definitionFn);

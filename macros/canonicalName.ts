@@ -9,7 +9,7 @@ import {
 import { Map } from "@opah/immutable";
 import { toAST } from "./toAST.ts";
 
-export const canonicalName = createMacro((node: Closure<any>) => {
+export const canonicalNameFn = (node: Closure<any>) => {
   const reference = (node.expression as Identifier).name;
   const referenceCanonicalName = node.references.get(reference)!;
   return Closure<CanonicalName>({
@@ -26,4 +26,6 @@ export const canonicalName = createMacro((node: Closure<any>) => {
       ],
     ]),
   });
-});
+};
+
+export const canonicalName = createMacro(canonicalNameFn);

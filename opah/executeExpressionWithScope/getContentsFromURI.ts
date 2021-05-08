@@ -1,7 +1,17 @@
-import { readFileSync } from "fs";
-import { IncomingMessage } from "http";
-import { get } from "https";
 import { Map } from "@opah/immutable";
+import { readFileSync } from "fs";
+import { someString } from "../../abstracts/someString.ts";
+import { assertThat } from "../../assertions/assertThat.ts";
+import { is } from "../../assertions/is.ts";
+import { concurrentMap } from "../../axax/concurrentMap.ts";
+import { getBody } from "../../http/getBody.ts";
+import { Hostname } from "../../http/Hostname.ts";
+import { isURL } from "../../http/HttpTarget.ts";
+import { HTTPServerParams, listenOnHostname } from "../../in_memory_host/$.ts";
+import { closure } from "../../macros/closure.ts";
+import { encode } from "../../refine/encode.ts";
+import { runScenarios } from "../../validator/runScenarios.ts";
+import { scenario } from "../../validator/scenario.ts";
 
 export type URIStore = Map<string, string>;
 
@@ -14,7 +24,7 @@ export async function getContentsFromURI(
     try {
       const contents = uri.startsWith("/")
         ? readFileSync(uri, "utf8")
-        : await getContentsFromURL(uri);
+        : await getBody({ target: { url: encode(isURL, uri) } });
 
       return [uriStore.set(uri, contents), contents];
     } catch (err) {
@@ -27,18 +37,25 @@ export async function getContentsFromURI(
   }
 }
 
-async function getContentsFromURL(url: string) {
-  const response = await new Promise<IncomingMessage>((resolve) =>
-    get(url, resolve)
-  );
-  return new Promise<string>((resolve) => {
-    response.setEncoding("utf8");
-    let rawData = "";
-    response.on("data", (chunk) => {
-      rawData += chunk;
-    });
-    response.on("end", () => {
-      resolve(rawData);
-    });
-  });
+export function test() {
+  runScenarios([
+    scenario({
+      description: "should get contents from an https url",
+      verify: closure(async () => {
+        const aString = someString();
+        const requestsIterator = listenOnHostname("example.com" as Hostname);
+        concurrentMap<HTTPServerParams, void>(async ({ request, response }) => {
+          const path = request.url;
+          response.write(aString);
+          response.end();
+        }, Infinity)(requestsIterator);
+
+        const [, contents] = await getContentsFromURI(
+          Map(),
+          "https://example.com/some-path"
+        );
+        await assertThat(contents, is(aString));
+      }),
+    }),
+  ]);
 }
