@@ -20,7 +20,7 @@ export function decodeHeader(buffer: Buffer) {
   if (c === 8 * 32) return null;
   if (c !== decodeOct(buffer, 148, 8))
     throw new Error(
-      "Invalid tar header. Maybe the tar is corrupted or it needs to be gunzipped?"
+      `Invalid tar header. Maybe the tar is corrupted or it needs to be gunzipped? (header buffer: ${buffer.toString()})`
     );
 
   if (USTAR_MAGIC.compare(buffer, MAGIC_OFFSET, MAGIC_OFFSET + 6) === 0) {
