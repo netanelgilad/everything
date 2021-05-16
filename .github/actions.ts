@@ -1,81 +1,38 @@
-import { createReadStream, readFileSync } from "fs";
-import { request } from "https";
-import { httpRequest } from "../http/httpRequest.ts";
-import { URLString } from "../http/HttpTarget.ts";
+import { readFileSync } from "fs";
+import {
+  FilePathString,
+  FolderPathString,
+  join,
+  RelativePathString,
+} from "../filesystem/PathString.ts";
 import { build } from "../opah/dev.ts";
-import { stringToReadable } from "../streams/stringToReadable.ts";
-import { readStreamToString } from "../streams/readStreamToString.ts";
+import { cryotoRandomString } from "../random/cryptoRandomString.ts";
+import { tmpdir } from "../os/tmpdir.ts";
+import { createTarFromFolder } from "../tar/createTarFromFolder.ts";
+import { publish } from "../npm/publish.ts";
+import { createGzip } from "zlib";
 
-export default async function (githubToken: string) {
+export default async function (npmAccessToken: string) {
   const commitHash = process.env.GITHUB_SHA;
-  const eventPayload = JSON.parse(
-    readFileSync(process.env.GITHUB_EVENT_PATH!, "utf8")
+
+  const packageDir = join(
+    tmpdir(),
+    cryotoRandomString(32) as RelativePathString
+  ) as FolderPathString;
+
+  await build(
+    "node14-linux",
+    join(packageDir, "opah" as RelativePathString) as FilePathString
   );
 
-  const {
-    repository: {
-      owner: { name: repoOwner },
-      name: repoName,
-    },
-  } = eventPayload;
+  const packageTarball = (await createTarFromFolder(packageDir)).pipe(
+    createGzip()
+  );
 
-  await build("node14-linux");
-
-  const response = await httpRequest({
-    method: "POST",
-    requestFn: request,
-    target: {
-      url: `https://api.github.com/repos/${repoOwner}/${repoName}/releases` as URLString,
-    },
-    headers: {
-      Accept: "application/vnd.github.v3+json",
-      Authorization: `Bearer ${githubToken}`,
-      "User-Agent": repoOwner,
-    },
-    data: stringToReadable(
-      JSON.stringify({
-        tag_name: `release-${commitHash?.substr(0, 7)}`,
-        target_commitish: commitHash,
-        prerelease: true,
-      })
-    ),
+  await publish({
+    name: "opah",
+    version: `0.0.0-${commitHash}`,
+    tarball: packageTarball,
+    authToken: npmAccessToken,
   });
-
-  if (response.statusCode === 201) {
-    console.log("Release created successfully");
-  } else {
-    throw new Error(
-      `Failed to create release: ${
-        response.statusCode
-      } ${await readStreamToString(response)}`
-    );
-  }
-
-  const createReleaseResponse = JSON.parse(await readStreamToString(response));
-
-  console.log(createReleaseResponse);
-
-  const uploadAssetResponse = await httpRequest({
-    method: "POST",
-    requestFn: request,
-    target: {
-      url: `${createReleaseResponse.upload_url}?name=opah` as URLString,
-    },
-    headers: {
-      Accept: "application/vnd.github.v3+json",
-      Authorization: `Bearer ${githubToken}`,
-      "User-Agent": repoOwner,
-    },
-    data: createReadStream("./target/node14-linux/opah"),
-  });
-
-  if (uploadAssetResponse.statusCode === 201) {
-    console.log("Asset uploaded successfully");
-  } else {
-    throw new Error(
-      `Failed to upload asset: ${
-        uploadAssetResponse.statusCode
-      } ${await readStreamToString(uploadAssetResponse)}`
-    );
-  }
 }

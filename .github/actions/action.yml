@@ -2,8 +2,8 @@
 name: "Opah"
 description: "Run an opah function"
 inputs:
-  repo-token:
-    description: "The repository token"
+  npm-access-token:
+    description: "Npm access token"
     required: true
 runs:
   using: "docker"
@@ -11,4 +11,4 @@ runs:
   args:
     - ./.github/actions.ts
     - default
-    - '"${{ inputs.repo-token }}"'
+    - '"${{ inputs.npm-access-token }}"'

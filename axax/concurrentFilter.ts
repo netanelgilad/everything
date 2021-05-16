@@ -7,7 +7,7 @@ import { StopError, toCallbacks } from "./toCallbacks.ts";
  */
 export function concurrentFilter<T>(
   predicate: (t: T) => Promise<boolean>,
-  concurrency: number
+  concurrency: number = Infinity
 ) {
   return function inner(source: AsyncIterable<T>) {
     const subject = new Subject<T>();

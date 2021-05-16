@@ -6,6 +6,7 @@ import {
   memberExpression,
 } from "@opah/core";
 import { join } from "path";
+import { FilePathString } from "../filesystem/PathString.ts";
 import { closure } from "../macros/closure.ts";
 import { runScenarios } from "../validator/runScenarios.ts";
 import { downloadOpahHost } from "./downloadOpahHost.ts";
@@ -13,7 +14,10 @@ import { getExecutionProgramForClosure } from "./executeExpressionWithScope/getE
 import { runFile } from "./runFile.ts";
 import { opahSpec } from "./spec/index.ts";
 
-export async function build(target: "host" | "node14-linux" = "host") {
+export async function build(
+  target: "host" | "node14-linux" = "host",
+  outputPath: FilePathString = `target/${target}/opah` as FilePathString
+) {
   const opahClosure = closure(async (argv: string[]) => {
     const fileToRun = argv[2];
     const exportedFunctionName = argv[3];
@@ -55,7 +59,7 @@ export async function build(target: "host" | "node14-linux" = "host") {
     },
     {
       target,
-      output: `target/${target}/opah`,
+      output: outputPath,
     }
   );
 }

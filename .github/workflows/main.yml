@@ -10,4 +10,4 @@ jobs:
       - name: Hello world action step
         uses: ./.github/actions
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          npm-access-token: ${{ secrets.NPM_ACCESS_TOKEN }}
