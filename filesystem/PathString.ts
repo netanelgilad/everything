@@ -7,4 +7,14 @@ export type PathString = RelativePathString | AbsolutePathString;
 export type FolderPathString = Refine<PathString, KeySet<"Folder">>;
 export type FilePathString = Refine<PathString, KeySet<"File">>;
 
-export const join = joinFs as (...args: PathString[]) => PathString;
+export type Join<TArgs extends PathString[]> = {
+  (...args: TArgs): TArgs extends PathString[]
+    ? TArgs extends [...PathString[], FilePathString]
+      ? FilePathString
+      : PathString
+    : never;
+};
+
+export const join = joinFs as <T extends PathString[]>(
+  ...args: T
+) => ReturnType<Join<T>>;

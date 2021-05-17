@@ -15,7 +15,7 @@ import { runFile } from "./runFile.ts";
 import { opahSpec } from "./spec/index.ts";
 
 export async function build(
-  target: "host" | "node14-linux" = "host",
+  target: "host" | "node14-linux" | "node14-macos" = "host",
   outputPath: FilePathString = `target/${target}/opah` as FilePathString
 ) {
   const opahClosure = closure(async (argv: string[]) => {

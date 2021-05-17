@@ -17,6 +17,7 @@ import { concurrentFilter } from "../axax/concurrentFilter.ts";
 import { isFile } from "../filesystem/isFile.ts";
 import { readFile } from "../filesystem/readFile.ts";
 import { basename } from "path";
+import { lstat } from "../filesystem/lstat.ts";
 
 const END_OF_TAR = Buffer.alloc(1024);
 const DMODE = parseInt("755", 8);
@@ -47,12 +48,13 @@ function modeToType(mode?: number) {
 async function addFileToTarGZStream(stream: Readable, file: FilePathString) {
   const type = modeToType(undefined);
   const buffer = await readFile(file);
+  const stats = await lstat(file);
   stream.push(
     encodeHeader({
       name: `package/${basename(file)}`,
       size: buffer.length,
       type,
-      mode: type === "directory" ? DMODE : FMODE,
+      mode: stats.mode,
       uid: 0,
       gid: 0,
       mtime: new Date(),
