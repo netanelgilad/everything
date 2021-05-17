@@ -11,6 +11,7 @@ export async function publish(opts: {
   version: string;
   tarball: Readable;
   authToken: string;
+  distTags: string[];
 }) {
   const tarballBuffer = await readStreamToBuffer(opts.tarball);
 
@@ -18,9 +19,9 @@ export async function publish(opts: {
     _id: opts.name,
     name: opts.name,
     access: "public",
-    "dist-tags": {
-      latest: opts.version,
-    },
+    "dist-tags": Object.fromEntries(
+      opts.distTags.map((tag) => [tag, opts.version])
+    ),
     versions: {
       [opts.version]: {
         name: opts.name,

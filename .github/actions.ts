@@ -5,6 +5,7 @@ import {
   join,
   RelativePathString,
 } from "../filesystem/PathString.ts";
+import { readFile } from "../filesystem/readFile.ts";
 import { writeFile } from "../filesystem/writeFile.ts";
 import { publish } from "../npm/publish.ts";
 import { build } from "../opah/dev.ts";
@@ -16,6 +17,9 @@ const PACKAGE_NAME = "opah";
 
 export default async function (npmAccessToken: string) {
   const commitHash = process.env.GITHUB_SHA;
+  const eventPayload = JSON.parse(
+    await readFile(process.env.GITHUB_EVENT_PATH! as FilePathString, "utf8")
+  );
 
   const packageVersion = `0.0.0-${commitHash}`;
 
@@ -47,5 +51,6 @@ export default async function (npmAccessToken: string) {
     version: packageVersion,
     tarball: packageTarball,
     authToken: npmAccessToken,
+    distTags: [eventPayload.ref],
   });
 }

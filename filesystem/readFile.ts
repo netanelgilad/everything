@@ -1,13 +1,21 @@
 import { FilePathString } from "./PathString.ts";
 import { readFile as readFileFs } from "fs";
 
-export function readFile(path: FilePathString) {
-  return new Promise<Buffer>((resolve, reject) => {
-    readFileFs(path, (err, contents) => {
+type Encoding = "utf8";
+type ContentsForEncoding<T extends Encoding> = T extends "utf8"
+  ? string
+  : Buffer;
+
+export function readFile<T extends Encoding>(
+  path: FilePathString,
+  encoding?: T
+) {
+  return new Promise<ContentsForEncoding<T>>((resolve, reject) => {
+    readFileFs(path, encoding, (err, contents) => {
       if (err) {
         reject(err);
       } else {
-        resolve(contents);
+        resolve(contents as ContentsForEncoding<T>);
       }
     });
   });
