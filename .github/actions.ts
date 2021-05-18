@@ -7,6 +7,7 @@ import {
 } from "../filesystem/PathString.ts";
 import { readFile } from "../filesystem/readFile.ts";
 import { writeFile } from "../filesystem/writeFile.ts";
+import { getNameOfRef } from "../git/getNameOfRef.ts";
 import { publish } from "../npm/publish.ts";
 import { build } from "../opah/dev.ts";
 import { tmpdir } from "../os/tmpdir.ts";
@@ -51,6 +52,6 @@ export default async function (npmAccessToken: string) {
     version: packageVersion,
     tarball: packageTarball,
     authToken: npmAccessToken,
-    distTags: [eventPayload.ref],
+    distTags: [getNameOfRef(eventPayload.ref)],
   });
 }
