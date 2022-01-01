@@ -30,7 +30,7 @@ export default async function (npmAccessToken: string) {
   ) as FolderPathString;
 
   await build(
-    "node14-macos",
+    "node14-linux",
     join(packageDir, PACKAGE_NAME as RelativePathString) as FilePathString
   );
 
