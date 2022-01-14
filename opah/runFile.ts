@@ -21,10 +21,8 @@ export async function runFile(
     exportedFunctionName?: string;
     args?: any[];
     cwd?: string;
-    silent?: boolean;
   } = {}
 ): Promise<ChildProcess> {
-  const silent = opts.silent ?? true;
   const args = opts.args ?? [];
   const exportedFunctionName = opts.exportedFunctionName ?? "default";
   const uri = path.startsWith(".")
@@ -38,7 +36,6 @@ export async function runFile(
 
   return executeCanonicalName(functionCanonicalName, args, {
     cwd: opts.cwd,
-    silent,
   });
 }
 
@@ -47,9 +44,6 @@ async function executeCanonicalName(
   args: any[] = [],
   opts: {
     cwd?: string;
-    silent?: boolean;
-  } = {
-    silent: true,
   }
 ) {
   const mappedArgs = args.map((x) => {

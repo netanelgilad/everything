@@ -35,7 +35,6 @@ export async function build(
           return JSON.parse(x);
         }
       }),
-      silent: false,
     });
   });
   const executeExpression = callExpression(opahClosure.expression, [
