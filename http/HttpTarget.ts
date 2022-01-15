@@ -1,5 +1,6 @@
+import { Closure, createMacro } from "@opah/core";
 import { URL } from "url";
-import { KeySet, Refine } from "../refine/refine.ts";
+import { KeySet, Refine } from "../refine/Refine.ts";
 
 export type HostAndPathTarget = {
   host: string;
@@ -20,3 +21,7 @@ export type URLTarget = {
 };
 
 export type HTTPTarget = HostAndPathTarget | SocketAndPathTarget | URLTarget;
+
+export const asURL = createMacro<[url: string], URLString>(async (urlClosure) => {
+  return urlClosure as Closure<URLString>;
+})
