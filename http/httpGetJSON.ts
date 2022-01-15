@@ -1,3 +1,4 @@
+import { parseJSON } from "@opah/host";
 import { emptyReadable } from "../streams/emptyReadable.ts";
 import { readStreamToString } from "../streams/readStreamToString.ts";
 import { httpRequest } from "./httpRequest.ts";
@@ -16,5 +17,5 @@ export async function httpGetJSON(
     },
   });
 
-  return JSON.parse(await readStreamToString(response));
+  return parseJSON(await readStreamToString(response));
 }
