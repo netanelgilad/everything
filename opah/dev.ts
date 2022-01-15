@@ -47,7 +47,7 @@ export async function build(
     })
   );
 
-  const opahHostDir = await downloadOpahHost("0.1.4");
+  const opahHostDir = await downloadOpahHost("0.1.9");
 
   await buildExecutable(
     program,
