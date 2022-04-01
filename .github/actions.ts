@@ -39,7 +39,7 @@ export default async function (npmAccessToken: string) {
     JSON.stringify({
       name: PACKAGE_NAME,
       version: packageVersion,
-      bin: `./${PACKAGE_NAME}`,
+      bin: { [PACKAGE_NAME]: `./${PACKAGE_NAME}` },
     })
   );
 
