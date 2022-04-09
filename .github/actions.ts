@@ -29,9 +29,19 @@ export default async function (npmAccessToken: string) {
     cryotoRandomString(32) as RelativePathString
   ) as FolderPathString;
 
+  const buildTarget = "node14-linux"
+
   await build(
-    "node14-linux",
-    join(packageDir, PACKAGE_NAME as RelativePathString) as FilePathString
+    buildTarget,
+    join(
+      packageDir,
+      `${PACKAGE_NAME}-${buildTarget}` as RelativePathString
+    ) as FilePathString
+  );
+
+  await writeFile(
+    join(packageDir, PACKAGE_NAME as FilePathString),
+    `require("child_process").execFileSync(join(__dirname__, '${PACKAGE_NAME}-${buildTarget}'), process.argv.slice(2), { stdio: "inherit" });`
   );
 
   await writeFile(
