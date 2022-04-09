@@ -42,7 +42,7 @@ export default async function (npmAccessToken: string) {
   await writeFile(
     join(packageDir, PACKAGE_NAME as FilePathString),
     `#!/usr/bin/env node
-    require("child_process").execFileSync(join(__dirname__, '${PACKAGE_NAME}-${buildTarget}'), process.argv.slice(2), { stdio: "inherit" });`,
+    require("child_process").execFileSync(require('path').join(__dirname__, '${PACKAGE_NAME}-${buildTarget}'), process.argv.slice(2), { stdio: "inherit" });`,
     {
       mode: 0x544
     }
